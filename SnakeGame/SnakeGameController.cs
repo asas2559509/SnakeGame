@@ -11,6 +11,7 @@ namespace SnakeGame
     public class SnakeGameController : Controller
     {
         Timer timer;
+        public static int direction2 = 3;
 
         public SnakeGameController()
         {
@@ -23,24 +24,62 @@ namespace SnakeGame
 
         public void KeyUpHandled(KeyboardState ks)
         {
+            int play = 1;
             int direction = -1;
+            
             Keys[] keys = ks.GetPressedKeys();
-           
+
             if (keys.Contains(Keys.Up))
             {
-                direction = SnakeGameModel.MOVE_UP;
+                if(direction2 == SnakeGameModel.MOVE_DOWN) { }
+                else
+                {
+                    direction = SnakeGameModel.MOVE_UP;
+                    direction2 = SnakeGameModel.MOVE_UP;
+
+                }                
             }
-            else if(keys.Contains(Keys.Down))
+            else if (keys.Contains(Keys.Down))
             {
-                direction = SnakeGameModel.MOVE_DOWN;
+                if (direction2 == SnakeGameModel.MOVE_UP) { }
+                else
+                {
+                    direction = SnakeGameModel.MOVE_DOWN;
+                    direction2 = SnakeGameModel.MOVE_DOWN;
+
+                }
             }
-            else if(keys.Contains(Keys.Left))
+            else if (keys.Contains(Keys.Left))
             {
-                direction = SnakeGameModel.MOVE_LEFT;
+                if (direction2 == SnakeGameModel.MOVE_RIGHT) { }
+                else
+                {
+                    direction = SnakeGameModel.MOVE_LEFT;
+                    direction2 = SnakeGameModel.MOVE_LEFT;
+
+                }
             }
-            else if(keys.Contains(Keys.Right))
+            else if (keys.Contains(Keys.Right))
             {
-                direction = SnakeGameModel.MOVE_RIGHT;
+                if (direction2 == SnakeGameModel.MOVE_LEFT) { }
+                else
+                {
+                    direction = SnakeGameModel.MOVE_RIGHT;
+                    direction2 = SnakeGameModel.MOVE_RIGHT;
+
+                }
+            }
+            else if (keys.Contains(Keys.Space))
+            {
+                if(timer.Enabled == true)
+                {
+                    timer.Enabled = false;
+                    
+                }else
+                {
+                    timer.Enabled = true;
+                    
+                }                
             }
             // Find all snakeboard model we know
             if (direction == -1) return;
@@ -53,9 +92,7 @@ namespace SnakeGame
                     sbm.SetDirection(direction);
                 }
             }
-
         }
-
 
         public void Start()
         {

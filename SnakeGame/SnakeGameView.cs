@@ -18,7 +18,7 @@ namespace SnakeGame
         Texture2D snakeTile = null;
         Texture2D foodTile = null;
         Texture2D wallTile = null;
-        private const int TILE_SIZE = 5;
+        public static int TILE_SIZE = 5;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SnakeGameModel sbm = null;
@@ -46,18 +46,37 @@ namespace SnakeGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             try
             {
-                using (var stream = TitleContainer.OpenStream("Content/black5b5.png"))
+                if (Snake.hardmode)
                 {
-                    snakeTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    using (var stream = TitleContainer.OpenStream("Content/black10b10.png"))
+                    {
+                        snakeTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
+                    using (var stream = TitleContainer.OpenStream("Content/gray10b10.png"))
+                    {
+                        foodTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
+                    using (var stream = TitleContainer.OpenStream("Content/white10b10.png"))
+                    {
+                        wallTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
                 }
-                using (var stream = TitleContainer.OpenStream("Content/gray5b5.png"))
+                else
                 {
-                    foodTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    using (var stream = TitleContainer.OpenStream("Content/black5b5.png"))
+                    {
+                        snakeTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
+                    using (var stream = TitleContainer.OpenStream("Content/gray5b5.png"))
+                    {
+                        foodTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
+                    using (var stream = TitleContainer.OpenStream("Content/white5b5.png"))
+                    {
+                        wallTile = Texture2D.FromStream(this.GraphicsDevice, stream);
+                    }
                 }
-                using (var stream = TitleContainer.OpenStream("Content/white5b5.png"))
-                {
-                    wallTile = Texture2D.FromStream(this.GraphicsDevice, stream);
-                }
+                
             } catch (Exception ex)
             {
                 MessageBox.Show("Can't load asset " + ex.ToString());
@@ -129,8 +148,17 @@ namespace SnakeGame
 
                 if (sbm.isHit)
                 {
-                    controller.Stop();
-                    MessageBox.Show("Game over!!, your score is " + (sbm.SnakeLength() - SnakeGameModel.SNAKE_INIT_SIZE));
+                    if (Snake.hardmode)
+                    {
+                        controller.Stop();
+                        MessageBox.Show("Game over!!, your score is " + ((sbm.SnakeLength() - SnakeGameModel.SNAKE_INIT_SIZE))*2);
+                    }
+                    else
+                    {
+                        controller.Stop();
+                        MessageBox.Show("Game over!!, your score is " + (sbm.SnakeLength() - SnakeGameModel.SNAKE_INIT_SIZE));
+                    }
+                    
                 }
 
                 if (sbm.isEating)

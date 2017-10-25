@@ -15,6 +15,8 @@ namespace SnakeGame
         protected SnakeGameModel sgm = null;
         protected SnakeGameView sgv = null;
         protected SnakeGameController sgc = null;
+        public static bool hardmode;
+
 
         protected static Snake _instance = null;
 
@@ -56,9 +58,9 @@ namespace SnakeGame
             try
             {
                 Snake.Debug("create view");
-                sgv = new SnakeGameView(40, 40);
-                Snake.Debug("create model");
-                sgm = new SnakeGameModel(40, 40);
+                sgv = new SnakeGameView(40, 40);                
+                Snake.Debug("create model");                                              
+                 sgm = new SnakeGameModel(40, 40);    
                 Snake.Debug("create controller");
                 sgc = new SnakeGameController();
                 Snake.Debug("attach model");
@@ -91,7 +93,14 @@ namespace SnakeGame
                 this.Invoke(d, new object[] { score });
             } else
             {
-                this.lblScore.Text = score;
+                if (!hardmode)
+                {
+                    this.lblScore.Text = score;
+                }
+                else
+                {
+                    this.lblScore.Text = (Convert.ToInt16(score)*2).ToString();
+                }
             }
         }
 
@@ -115,6 +124,25 @@ namespace SnakeGame
             {
                 sgv.Dispose();
                 sgv.Exit();
+            }
+        }
+
+        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            
+            if (!hardmode)
+            {
+                SnakeGameView.TILE_SIZE = 10;
+                hardmode = true;
+                button1.BackColor = Color.Red;
+            }
+            else
+            {
+                SnakeGameView.TILE_SIZE = 5;
+                hardmode = false;
+                button1.BackColor = Color.Lime;
             }
         }
     }
